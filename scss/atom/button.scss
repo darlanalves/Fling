@@ -1,0 +1,25 @@
+@import "base";
+
+.button {
+	@extend %button;
+
+	&.mini {
+		@extend %button-mini;
+	}
+
+	.primary {
+		@extend %button;
+		@extend %button-primary;
+	}
+
+	.secondary {
+		@extend %button;
+		@extend %button-secondary;
+	}
+
+	.cancel {
+		@extend %button;
+		@extend %button-cancel;
+	}
+}
+

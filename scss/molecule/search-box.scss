@@ -1,0 +1,13 @@
+.search-box {
+	display: inline-block;
+	min-height: 2.5rem;
+
+	> .input {
+		float: left;
+		width: 70%;
+	}
+
+	> .button {
+		width: 30%;
+	}
+}

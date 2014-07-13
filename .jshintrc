@@ -1,0 +1,15 @@
+{
+	"node": true,
+	"strict": false,
+	"globals": {
+		"angular": true,
+		"$module": true,
+		"console": true,
+		"describe": true,
+		"it": true,
+		"xdescribe": true,
+		"xit": true,
+		"beforeEach": true,
+		"afterEach": true
+	}
+}

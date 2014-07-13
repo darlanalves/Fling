@@ -1,0 +1,14 @@
+@import "base";
+
+.input {
+	@extend %input;
+
+	&.mini {
+		@extend %input-mini;
+	}
+
+	&.line {
+		@extend %input-line;
+	}
+}
+

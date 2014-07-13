@@ -1,0 +1,36 @@
+%button {
+	display: inline-block;
+	padding: 1.2rem 3.5rem;
+	font-size: $base-font-size;
+	border-width: 1px;
+	border-style: solid;
+	border-color: transparent;
+	font-weight: 400;
+	border-radius: $base-radius;
+	transition: background .2s ease-out;
+	
+	text-transform: uppercase;
+}
+
+%button-mini {
+	padding: 0.6rem 1.4rem;
+	font-size: 12/15 * $base-font-size;
+}
+
+%button-primary {
+	border-color: $base-color;
+	color: $base-light;
+	background: $base-color;
+}
+
+%button-secondary {
+	border-color: #EDF0F1;
+	color: #BFBFBF;
+	background: white;
+}
+
+%button-cancel {
+	border-color: $base-light;
+	color: $base-shadow;
+	background: $base-light;
+}
