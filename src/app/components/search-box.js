@@ -1,39 +1,42 @@
 $module.directive('searchBox', function() {
 
 	function debounce(fn, delay) {
-		var timer;
-
-		function run() {
-			fn();
-			clearTimeout(timer);
-			timer = null;
-		}
-
+		var timer = null;
 		return function() {
-			if (timer) return;
-
-			timer = setTimeout(run, delay);
-		}
+			timer || (timer = setTimeout(function() {
+				timer = false;
+				fn();
+			}, delay));
+		};
 	}
 
 	return {
-		template: '<input type="text" ng-model="search.keyword" placeholder="{{placeholder}}" /><button class="button" ng-bind="actionText"></button>',
-		replace: true,
+		template: '<div ng-class="{\'with-button\': withButton}"><input type="text" ng-attr-tabindex="{{tabindex}}" ng-class="{mini:mini}" ng-model="search.keywords" placeholder="{{placeholder}}" ng-enter="doSearch()" class="input" /><button ng-if="withButton" class="primary button" ng-click="doSearch()" ng-bind="actionText" type="submit" ng-class="{mini:mini}"></button></div>',
 		restrict: 'C',
 		scope: {
 			onsearch: '&',
+			onchange: '&',
 			placeholder: '@',
-			actionText: '@'
+			actionText: '@',
+			tabindex: '@'
 		},
+
 		link: function($scope, $element, $attrs) {
 			$scope.search = {};
 
-			var handler = $scope.onsearch,
-				trigger = debounce(function() {
-					handler($scope.search.keywords);
-				}, $attrs.delay || 50);
+			var onchange = $scope.onchange(),
+				onsearch = $scope.onsearch(),
+				onchangeTrigger = debounce(function() {
+					onchange && onchange($scope.search.keywords);
+				}, $attrs.delay || 200);
 
-			$scope.$watch('search.keywords', handler);
+			$scope.$watch('search.keywords', onchangeTrigger);
+			$scope.mini = ('mini' in $attrs);
+			$scope.withButton = ('button' in $attrs);
+
+			$scope.doSearch = function() {
+				onsearch && onsearch($scope.search.keywords);
+			};
 		}
 	}
 })

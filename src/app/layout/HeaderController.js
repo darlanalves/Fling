@@ -1,8 +1,13 @@
-$module.controller('HeaderController', ['$scope', '$state',
-	function($scope, $state) {
+$module.controller('HeaderController', ['$scope', '$state', 'SEARCH',
+	function($scope, $state, SEARCH) {
 		$scope.searchByName = function(name) {
-			$state.go('app.people.search', {
-				name: name
+			if (!name) return;
+
+			$state.go('app.search', {
+				name: name,
+				tab: SEARCH
+			}, {
+				reload: true
 			});
 		};
 	}

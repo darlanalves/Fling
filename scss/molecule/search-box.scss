@@ -1,13 +1,24 @@
+@import "base";
+
 .search-box {
 	display: inline-block;
-	min-height: 2.5rem;
 
-	> .input {
-		float: left;
-		width: 70%;
+	.input {
+		width: 100%;
+		background-image: url(/img/mag.png);
+		background-repeat: no-repeat;
+		background-position: 98% center;
 	}
 
-	> .button {
-		width: 30%;
+	&.with-button {
+		.input {
+			width: 70%;
+			border-radius: $base-radius 0 0 $base-radius;
+		}
+
+		.button {
+			width: 30%;
+			border-radius: 0 $base-radius $base-radius 0;
+		}
 	}
 }

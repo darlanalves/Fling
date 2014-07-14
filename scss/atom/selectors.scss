@@ -1,0 +1,40 @@
+@import "base";
+
+.selector {
+	@extend %selector;
+}
+
+.selector option {
+	@extend %selector-option;
+}
+
+.radio-group {
+	label {
+		@extend %radio-input-label;
+		font-size: $base-font-size;
+	}
+
+	input[type=radio] {
+		@extend %radio-input;
+
+		+ label:before {
+			@extend %radio-input-circle;
+			border: 1px solid $base-light;
+			background-color: white;
+		}
+
+		&:focus + label {
+			outline: 1px dotted $base-shadow;
+		}
+
+		&:focus + label:before {
+			border-color: $base-color;
+		}
+
+		&:checked + label:before,
+		&:checked:focus + label:before {
+			background-color: $base-color;
+			border-color: $base-color;
+		}
+	}
+}

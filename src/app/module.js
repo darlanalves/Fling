@@ -1,4 +1,4 @@
-var $module = angular.module('fling', ['ui.router', 'assert', 'defer'])
+var $module = angular.module('fling', ['ui.router', 'assert', 'defer', 'ngSanitize'])
 
 .config(['assertProvider',
 	function(assertProvider) {

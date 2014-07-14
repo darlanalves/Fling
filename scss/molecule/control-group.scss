@@ -1,0 +1,18 @@
+@import "base";
+
+.control-group {
+	margin-bottom: 1em;
+
+	&[required] label:first-child:after {
+		content: "*";
+		display: inline-block;
+		color: $base-color;
+		font-weight: bold;
+		padding-left: .5em;
+	}
+}
+
+.button-group {
+	padding: 1em 0;
+	text-align: right;
+}

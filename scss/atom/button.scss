@@ -2,24 +2,27 @@
 
 .button {
 	@extend %button;
+	@extend %button-disabled;
 
 	&.mini {
 		@extend %button-mini;
 	}
 
-	.primary {
+	&.primary {
 		@extend %button;
 		@extend %button-primary;
+		@extend %button-disabled;
 	}
 
-	.secondary {
+	&.secondary {
 		@extend %button;
 		@extend %button-secondary;
+		@extend %button-disabled;
 	}
 
-	.cancel {
+	&.cancel {
 		@extend %button;
 		@extend %button-cancel;
+		@extend %button-disabled;
 	}
 }
-

@@ -1,0 +1,32 @@
+<div class="form" ng-submit="saveUser(signupForm)" ng-form="signup">
+	<h2 class="header">Inscreva-se</h2>
+
+	<div class="control-group" required="">
+		<label class="label">CPF (somente números)</label>
+		<input type="text" ng-model="user.uid" class="input" tabindex="3" />
+	</div>
+
+	<div class="control-group" required="">
+		<label class="label">Nome</label>
+		<input type="text" ng-model="user.name" class="input" tabindex="4" />
+	</div>
+
+	<div class="control-group" required="">
+		<label class="label">Sexo</label>
+		
+		<div class="radio-group">
+			<input type="radio" name="gender" ng-model="user.gender" value="{{GENDER_MALE}}" tabindex="5" />
+			<label>Masculino</label>
+
+			<input type="radio" name="gender" ng-model="user.gender" value="{{GENDER_FEMALE}}" tabindex="6" />
+			<label>Feminino</label>
+		</div>
+	</div>
+
+	<div class="control-group" required="">
+		<label class="label">Altura (cm)</label>
+		<input type="number" ng-model="user.height" class="input" tabindex="7" step="1" />
+	</div>
+
+	<button type="submit" class="primary button" tabindex="8" ng-disabled="signup.$invalid">Continuar</button>
+</div>

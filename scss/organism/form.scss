@@ -1,0 +1,7 @@
+@import "base";
+
+.form {
+	.input:focus {
+		border-color: $base-color;
+	}
+}

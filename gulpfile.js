@@ -81,7 +81,7 @@ gulp.task('views', function() {
 		gulp.src('src/app/**/*.html'),
 		templateCache({
 			output: 'views.js',
-			strip: 'views',
+			strip: 'src/app',
 			moduleName: 'fling',
 			minify: {
 				collapseBooleanAttributes: true,
@@ -126,7 +126,7 @@ gulp.task('watch', function() {
 
 	handleChanges(gulp.watch('src/app/**/*.js', ['min']));
 	handleChanges(gulp.watch('scss/**/*.scss', ['sass']));
-	handleChanges(gulp.watch('views/**/*.html', ['views']));
+	handleChanges(gulp.watch('src/app/**/*.html', ['views']));
 	handleChanges(gulp.watch('mocks/**/*.js', ['mocks']));
 });
 

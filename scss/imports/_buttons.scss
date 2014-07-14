@@ -1,20 +1,19 @@
 %button {
 	display: inline-block;
-	padding: 1.2rem 3.5rem;
-	font-size: $base-font-size;
 	border-width: 1px;
 	border-style: solid;
 	border-color: transparent;
-	font-weight: 400;
 	border-radius: $base-radius;
-	transition: background .2s ease-out;
-	
+	font-weight: 400;
 	text-transform: uppercase;
+	cursor: pointer;
+	@extend  %input-layout;
+	@extend  %input-transition;
 }
 
 %button-mini {
 	padding: 0.6rem 1.4rem;
-	font-size: 12/15 * $base-font-size;
+	font-size: 0.8 * $base-font-size;
 }
 
 %button-primary {
@@ -24,8 +23,8 @@
 }
 
 %button-secondary {
-	border-color: #EDF0F1;
-	color: #BFBFBF;
+	border-color: #edf0f1;
+	color: #bfbfbf;
 	background: white;
 }
 
@@ -33,4 +32,12 @@
 	border-color: $base-light;
 	color: $base-shadow;
 	background: $base-light;
+}
+
+%button-disabled {
+	&[disabled] {
+		border-color: $background-light;
+		color: #999;
+		background: $background-light;
+	}
 }

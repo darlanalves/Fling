@@ -1,4 +1,7 @@
 %header {
-	padding: 2rem 2.5rem;
-	text-transform: uppercase;
+	padding: 1rem 0;
+	margin-bottom: 1rem;
+	font-size: $heading-font-size;
+	font-weight: bold;
+	border-bottom: 0.3rem solid $base-color;
 }

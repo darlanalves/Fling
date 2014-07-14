@@ -1,0 +1,19 @@
+@import "base";
+
+body {
+	font-family: $base-font;
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Montserrat-Regular'), url(/font/Montserrat-Regular.woff) format('woff'), url(/font/Montserrat-Regular.ttf) format('truetype');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Montserrat-Bold'), url(/font/Montserrat-Bold.woff) format('woff'), url(/font/Montserrat-Bold.ttf) format('truetype');
+}

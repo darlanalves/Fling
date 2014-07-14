@@ -1,0 +1,11 @@
+@import "base";
+
+.header {
+	@extend %header;
+}
+
+form .header {
+	@extend %header;
+	padding-left: 0;
+	color: $base-shadow;
+}

@@ -6,6 +6,11 @@ $module.config(['$stateProvider',
 				templateUrl: '/layout/layout.html'
 			},
 
+			'app.user': {
+				abstract: true,
+				template: '<ui-view/>'
+			},
+
 			'app.user.signup': {
 				url: '/app/signup',
 				templateUrl: '/user/signup.html',
@@ -18,21 +23,16 @@ $module.config(['$stateProvider',
 				controller: 'User/ProfileController'
 			},
 
-			'app.people': {
-				url: '/app/people',
-				templateUrl: '/people/people.html'
-			},
-
-			'app.people.trending': {
-				url: '/trending',
-				templateUrl: '/people/trending.html',
-				controller: 'People/TrendingController'
-			},
-
-			'app.people.search': {
-				url: '/search?name&gender&height',
+			'app.search': {
+				url: '/app/search?name&gender&minHeight&maxHeight&height',
 				templateUrl: '/people/search.html',
 				controller: 'People/SearchController'
+			},
+
+			'app.trending': {
+				url: '/app/trending',
+				templateUrl: '/people/trending.html',
+				controller: 'People/TrendingController'
 			}
 		};
 

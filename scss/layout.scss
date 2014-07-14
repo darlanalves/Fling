@@ -1,5 +1,59 @@
 @import "base";
 
-body {
-	font-family: $base-font;
+$topbar-height: 4rem;
+$sidebar-size: 250px;
+
+[ui-sref] {
+	cursor: pointer;
+}
+
+.main-header {
+	@extend %clearfix;
+	background: $base-color;
+	color: white;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: $topbar-height;
+
+	> .branding {
+		margin: 0;
+		padding: .5rem 1rem;
+		float: left;
+		font-family: $branding-font;
+	}
+
+	> .search-box {
+		float: right;
+		width: 30%;
+		margin: .5rem 1rem 0 0;
+
+		.input {
+			opacity: 0.9;
+			transition: opacity 0.2s ease-out;
+		}
+
+		.input:focus,
+		.input:focus {
+			opacity: 1;
+		}
+	}
+}
+
+.main-menu {
+	float: left;
+	width: 100%;
+	margin-top: $topbar-height;
+	max-width: $sidebar-size;
+	background: $base-shadow;
+}
+
+.main-section {
+	float: left;
+	width: 100%;
+	max-width: calc(100% - #{$sidebar-size});
+	margin-top: $topbar-height;
+	padding: 0 2rem;
+	font-size: $base-font-size;
 }

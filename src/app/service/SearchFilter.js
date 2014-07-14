@@ -19,8 +19,17 @@ $module.factory('SearchFilter', function() {
 			this.$sort = null;
 		},
 
+		setFilters: function(filter) {
+			this.$filter = filter;
+		},
+
 		setFilter: function(name, value) {
 			this.$filter[name] = value;
+		},
+
+		unsetFilter: function(name) {
+			this.$filter[name] = null;
+			delete this.$filter[name];
 		},
 
 		setSorting: function(rule, direction) {
@@ -37,8 +46,8 @@ $module.factory('SearchFilter', function() {
 
 		getParams: function() {
 			return {
-				filter: this.$filter,
-				sort: this.$sort,
+				filter: angular.copy(this.$filter),
+				sort: angular.copy(this.$sort),
 				page: this.$page,
 				limit: this.$limit
 			}

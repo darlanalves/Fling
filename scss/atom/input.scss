@@ -2,9 +2,18 @@
 
 .input {
 	@extend %input;
+	@extend %input-layout;
+	border-color: $base-light;
+	background-color: darken(white, 2%);
+	color: $background-dark;
+
+	&:focus {
+		background-color: white;
+		color: $base-shadow;
+	}
 
 	&.mini {
-		@extend %input-mini;
+		@extend %input-layout-mini;
 	}
 
 	&.line {

@@ -1,0 +1,11 @@
+@import "base";
+
+.tab {
+	position: relative;
+	padding: 1em 2em;
+	display: none;
+
+	&.active {
+		display: block;
+	}
+}

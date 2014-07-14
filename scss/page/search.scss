@@ -1,0 +1,26 @@
+@import "base";
+
+.page.search {
+	@extend %clearfix;
+
+	.half {
+		float: left;
+		width: 48%;
+
+		.input {
+			width: 100%;
+		}
+
+		&.left {
+			margin-right: 4%;
+		}
+
+		small {
+			font-size: .8em;
+		}
+	}
+
+	.control-group.height {
+		height: 5em;
+	}
+}

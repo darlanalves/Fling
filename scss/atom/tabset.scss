@@ -1,0 +1,23 @@
+@import "base";
+
+.tabset {
+	position: relative;
+}
+
+.tab-buttons {
+	display: block;
+	@extend %clearfix;
+	border-bottom: 3px solid  $base-color;
+}
+
+.tab-button {
+	@extend %input-layout;
+	@extend %input-transition;
+	@extend %tabset-button;
+	background-color: darken(white, 2%);
+
+	&.active {
+		background-color: $base-color;
+		color: $base-light;
+	}
+}

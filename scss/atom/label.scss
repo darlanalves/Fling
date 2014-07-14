@@ -1,0 +1,13 @@
+@import "base";
+
+.label {
+	@extend %label;
+
+	&.mini {
+		@extend %label-mini;
+	}
+
+	&.inline {
+		@extend %label-inline;
+	}
+}

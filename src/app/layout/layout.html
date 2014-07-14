@@ -1,12 +1,10 @@
-<header class="header" ng-controller="HeaderController">
-	<h1 class="branding"><span>Fling</span></h1>
-	<div class="search-box" onsearch="searchByName()" action-text="Go" placeholder="Search people..."></div>
+<header class="main-header" ng-controller="HeaderController">
+	<h1 class="branding" ui-sref="app"><span>Fling</span></h1>
+	<div class="search-box" mini="true" onsearch="searchByName" delay="500" action-text="OK" placeholder="Buscar pessoas..." tabindex="1"></div>
 </header>
 
-<aside>
-	<div ng-include="'/layout/menu.html'"></div>
-</aside>
+<aside class="main-menu" ng-include="'/layout/menu.html'"></aside>
 
-<section>
+<article class="main-section">
 	<div ui-view></div>
-</section>
+</article>

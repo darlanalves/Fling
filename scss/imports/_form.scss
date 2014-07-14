@@ -1,0 +1,15 @@
+%input-layout {
+	padding: 1.2rem 1rem;
+	font-size: $base-font-size;
+}
+
+%input-transition {
+	transition: background-color .2s ease-out,
+		border-color .2s ease-out,
+		color .2s ease-out;
+}
+
+%input-layout-mini {
+	padding: 0.6rem 1rem;
+	font-size: 0.8 * $base-font-size;
+}

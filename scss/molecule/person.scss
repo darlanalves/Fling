@@ -1,0 +1,51 @@
+@import "base";
+
+.person {
+	> span:last-child {
+		@extend %clearfix;
+		display: block;
+		width: 100%;
+		height: .5rem;
+		margin: 1rem auto;
+		border-bottom: 1px solid $base-light;
+	}
+
+	.name {
+		display: block;
+		font-size: 1.2em;
+		padding-bottom: .5em;
+	}
+
+	.gender, .height {
+		display: inline-block;
+		width: 50%;
+
+		&:before {
+			content: "";
+			display: inline-block;
+			width: 2.4rem;
+			height: 2.4rem;
+			line-height: 2.4rem;
+			margin-right: 1em;
+			background: url() no-repeat center;
+			color: $base-shadow;
+			vertical-align: middle;
+			// border-radius: 100%;
+			text-align: center;
+		}
+	}
+
+	.gender:before {
+		background-image: url(/img/gender.png)
+	}
+
+	.height:before {
+		background-image: url(/img/height.png)
+	}
+
+	.name span:hover,
+	.gender:hover,
+	.height:hover {
+		@extend %anchor;
+	}
+}
