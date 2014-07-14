@@ -1,0 +1,29 @@
+@import "base";
+
+$active-color: lighten($base-color, 5%);
+
+.menu {
+	li {
+		display: block;
+	}
+
+	a {
+		@extend %menu-link;
+		border-left: .1rem solid $active-color;
+		color: $base-shadow;
+		background: $background-light;
+	}
+
+	a:hover,
+	a:focus,
+	a:active {
+		background: $active-color;
+		color: $base-light;
+		padding-left: 2rem;
+	}
+
+	.active a {
+		padding-left: 2rem;
+		border-left-width: 1rem;
+	}
+}

@@ -4,6 +4,13 @@ $module.controller('People/SearchController', ['$scope', '$state', '$stateParams
 
 		$scope.$on('filter.changed', updateResults);
 		$scope.$on('filter.selected', function($e, name, value) {
+			if (name === 'uid') {
+				$state.go('app.profile', {
+					uid: value
+				});
+				return;
+			}
+
 			filters.setFilter(name, value);
 			updateResults();
 		});
@@ -33,12 +40,12 @@ $module.controller('People/SearchController', ['$scope', '$state', '$stateParams
 
 		function updateResults() {
 			var params = getParams();
-			$state.go($state.current.name, params, {
-				inherit: false
-			});
 
 			UserService.findAll(filters).then(function(results) {
 				$scope.results = results;
+				$state.transitionTo($state.current.name, params, {
+					inherit: false
+				});
 			}, function(results) {
 				console.log(results);
 			});

@@ -7,8 +7,9 @@ $module.directive('person', function() {
 		},
 		template: '<div class="person">' +
 			'<a class="name" ng-bind="person.name" ng-click="selectPerson()"></a>' +
-			'<div class="gender" ng-bind="person.gender" ng-click="selectGender()"></div>' +
+			'<div class="gender" ng-bind="person.gender | gender" ng-click="selectGender()"></div>' +
 			'<div class="height" ng-bind="person.height" ng-click="selectHeight()"></div>' +
+			'<div class="views" ng-bind="person.views"></div>' +
 			'<span></span>' +
 			'</div>',
 
@@ -26,7 +27,7 @@ $module.controller('PersonController', ['$scope',
 			$scope.$emit('filter.selected', 'minHeight', $scope.$eval('person.height'));
 		};
 
-		$scope.selectName = function($event) {
+		$scope.selectPerson = function($event) {
 			$scope.$emit('filter.selected', 'uid', $scope.$eval('person.uid'));
 		};
 

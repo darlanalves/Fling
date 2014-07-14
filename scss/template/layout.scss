@@ -1,8 +1,5 @@
 @import "base";
 
-$topbar-height: 4rem;
-$sidebar-size: 250px;
-
 [ui-sref] {
 	cursor: pointer;
 }
@@ -16,6 +13,7 @@ $sidebar-size: 250px;
 	right: 0;
 	top: 0;
 	height: $topbar-height;
+	z-index: 99;
 
 	> .branding {
 		margin: 0;
@@ -46,7 +44,6 @@ $sidebar-size: 250px;
 	width: 100%;
 	margin-top: $topbar-height;
 	max-width: $sidebar-size;
-	background: $base-shadow;
 }
 
 .main-section {

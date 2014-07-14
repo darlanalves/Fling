@@ -6,19 +6,20 @@ $module.config(['$stateProvider',
 				templateUrl: '/layout/layout.html'
 			},
 
-			'app.user': {
-				abstract: true,
-				template: '<ui-view/>'
-			},
-
-			'app.user.signup': {
+			'app.signup': {
 				url: '/app/signup',
 				templateUrl: '/user/signup.html',
 				controller: 'User/SignupController'
 			},
 
-			'app.user.my-profile': {
+			'app.my-profile': {
 				url: '/app/me',
+				templateUrl: '/user/profile.html',
+				controller: 'User/ProfileController'
+			},
+
+			'app.profile': {
+				url: '/app/profile/:uid',
 				templateUrl: '/user/profile.html',
 				controller: 'User/ProfileController'
 			},

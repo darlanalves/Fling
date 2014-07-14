@@ -1,6 +1,6 @@
-<ul ng-controller="MenuController">
-	<li><a ui-sref="app.user.signup">Inscreva-se</a></li>
-	<li ng-if="hasProfileActive()"><a ui-sref="app.user.my-profile">Meu perfil</a></li>
-	<li><a ui-sref="app.trending">Mais acessadas</a></li>
-	<li><a ui-sref="app.search">Buscar pessoas</a></li>
+<ul ng-controller="MenuController" class="menu">
+	<li ui-sref-active="active"><a ui-sref="app.signup">Inscreva-se</a></li>
+	<li ui-sref-active="active" ng-if="hasProfileActive()"><a ui-sref="app.my-profile">Meu perfil</a></li>
+	<li ui-sref-active="active"><a ui-sref="app.trending">Mais acessadas</a></li>
+	<li ui-sref-active="active"><a ui-sref="app.search">Buscar pessoas</a></li>
 </ul>

@@ -1,4 +1,4 @@
-<div class="form" ng-submit="saveUser(signupForm)" ng-form="signup">
+<form class="form" name="signup">
 	<h2 class="header">Inscreva-se</h2>
 
 	<div class="control-group" required="">
@@ -28,5 +28,5 @@
 		<input type="number" ng-model="user.height" class="input" tabindex="7" step="1" />
 	</div>
 
-	<button type="submit" class="primary button" tabindex="8" ng-disabled="signup.$invalid">Continuar</button>
-</div>
+	<button type="submit" ng-click="saveUser(signup)" class="primary button" tabindex="8" ng-disabled="signup.$invalid">Continuar</button>
+</form>

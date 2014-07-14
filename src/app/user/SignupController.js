@@ -6,9 +6,9 @@ $module.controller('User/SignupController', ['$scope', '$state', 'UserService',
 			if ($form && $form.$invalid) return;
 
 			UserService.create($scope.user).then(function() {
-				$state.go('app.user.profile', {
-					id: $scope.user.uid
-				});
+				$state.go('app.my-profile');
+			}, function(reason) {
+				console.log(reason);
 			});
 		};
 	}

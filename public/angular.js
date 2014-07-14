@@ -24693,13 +24693,6 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
 				return ERR_INVALID_TYPE + ': ' + cause;
 			}
 
-			function negatedValue(fn) {
-				return function() {
-					arguments[0] = !arguments[0];
-					fn.apply(null, arguments);
-				};
-			}
-
 			var is = {
 				array: function(value, message) {
 					assert(angular.isArray(value), message || invalidTypeMessage('value is not array'));
@@ -24717,15 +24710,25 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
 					assert(angular.isNumber(value), message || invalidTypeMessage('value is not a number'));
 				},
 
-				empty: function(value, message) {
+				empty: function(value, message, inverse) {
 					value = (value === undefined || value === null || trim(value) === '');
-					assert(value, message || 'Value is empty');
+					(inverse ? assertNot : assert)(value, message || 'Value is empty');
 				}
 			};
 
+			function assertNot(value, message, cause) {
+				assert(!value, message, cause);
+			}
+
+			function inverseFn(fn) {
+				return function(value, message) {
+					fn(value, message, true);
+				};
+			}
+
 			var not = {};
 			for (var assertion in is) {
-				not[assertion] = negatedValue(is[assertion]);
+				not[assertion] = inverseFn(is[assertion]);
 			}
 
 			is.not = not;

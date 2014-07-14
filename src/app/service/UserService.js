@@ -13,6 +13,10 @@ $module.factory('UserService', ['$http', 'assert', 'is', 'SearchFilter', 'reject
 				return profile !== null;
 			},
 
+			getActiveProfile: function() {
+				return profile;
+			},
+
 			/**
 			 * @param {Number} uid
 			 */
@@ -21,7 +25,9 @@ $module.factory('UserService', ['$http', 'assert', 'is', 'SearchFilter', 'reject
 					return rejected(new Error('Identificação de usuário inválida'));
 				}
 
-				return $http.get('/user/' + uid);
+				return $http.get('/user/' + uid).then(function(response) {
+					return response.data;
+				});
 			},
 
 			/**

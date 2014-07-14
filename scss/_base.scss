@@ -10,6 +10,7 @@
 @import "imports/anchor";
 @import "imports/labels";
 @import "imports/tabs";
+@import "imports/menu";
 
 %clearfix {
 	&:before,
@@ -22,3 +23,6 @@
 		clear: both;
 	}
 }
+
+$topbar-height: 4rem;
+$sidebar-size: 250px;

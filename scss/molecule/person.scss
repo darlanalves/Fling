@@ -16,9 +16,9 @@
 		padding-bottom: .5em;
 	}
 
-	.gender, .height {
+	.gender, .height, .views {
 		display: inline-block;
-		width: 50%;
+		width: 33%;
 
 		&:before {
 			content: "";
@@ -41,6 +41,10 @@
 
 	.height:before {
 		background-image: url(/img/height.png)
+	}
+
+	.views:before {
+		background-image: url(/img/views.png)
 	}
 
 	.name span:hover,

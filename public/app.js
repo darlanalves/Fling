@@ -31,19 +31,20 @@ $module.config(['$stateProvider',
 				templateUrl: '/layout/layout.html'
 			},
 
-			'app.user': {
-				abstract: true,
-				template: '<ui-view/>'
-			},
-
-			'app.user.signup': {
+			'app.signup': {
 				url: '/app/signup',
 				templateUrl: '/user/signup.html',
 				controller: 'User/SignupController'
 			},
 
-			'app.user.my-profile': {
+			'app.my-profile': {
 				url: '/app/me',
+				templateUrl: '/user/profile.html',
+				controller: 'User/ProfileController'
+			},
+
+			'app.profile': {
+				url: '/app/profile/:uid',
 				templateUrl: '/user/profile.html',
 				controller: 'User/ProfileController'
 			},
@@ -64,6 +65,27 @@ $module.config(['$stateProvider',
 		angular.forEach(states, function(config, name) {
 			$stateProvider.state(name, config);
 		});
+	}
+]);
+$module.controller('HeaderController', ['$scope', '$state', 'SEARCH',
+	function($scope, $state, SEARCH) {
+		$scope.searchByName = function(name) {
+			if (!name) return;
+
+			$state.go('app.search', {
+				name: name,
+				tab: SEARCH
+			}, {
+				reload: true
+			});
+		};
+	}
+]);
+$module.controller('MenuController', ['$scope', 'UserService',
+	function($scope, UserService) {
+		$scope.hasProfileActive = function() {
+			return UserService.hasProfileActive();
+		};
 	}
 ]);
 $module.directive('controlGroup', function() {
@@ -108,8 +130,9 @@ $module.directive('person', function() {
 		},
 		template: '<div class="person">' +
 			'<a class="name" ng-bind="person.name" ng-click="selectPerson()"></a>' +
-			'<div class="gender" ng-bind="person.gender" ng-click="selectGender()"></div>' +
+			'<div class="gender" ng-bind="person.gender | gender" ng-click="selectGender()"></div>' +
 			'<div class="height" ng-bind="person.height" ng-click="selectHeight()"></div>' +
+			'<div class="views" ng-bind="person.views"></div>' +
 			'<span></span>' +
 			'</div>',
 
@@ -127,7 +150,7 @@ $module.controller('PersonController', ['$scope',
 			$scope.$emit('filter.selected', 'minHeight', $scope.$eval('person.height'));
 		};
 
-		$scope.selectName = function($event) {
+		$scope.selectPerson = function($event) {
 			$scope.$emit('filter.selected', 'uid', $scope.$eval('person.uid'));
 		};
 
@@ -320,33 +343,19 @@ $module.directive('tagBar', function() {
 		}
 	}
 });
-$module.controller('HeaderController', ['$scope', '$state', 'SEARCH',
-	function($scope, $state, SEARCH) {
-		$scope.searchByName = function(name) {
-			if (!name) return;
-
-			$state.go('app.search', {
-				name: name,
-				tab: SEARCH
-			}, {
-				reload: true
-			});
-		};
-	}
-]);
-$module.controller('MenuController', ['$scope', 'UserService',
-	function($scope, UserService) {
-		$scope.hasProfileActive = function() {
-			return UserService.hasProfileActive();
-		};
-	}
-]);
 $module.controller('People/SearchController', ['$scope', '$state', '$stateParams', 'UserService', 'SearchFilter',
 	function($scope, $state, $stateParams, UserService, SearchFilter) {
 		var filters = $scope.filters = new SearchFilter();
 
 		$scope.$on('filter.changed', updateResults);
 		$scope.$on('filter.selected', function($e, name, value) {
+			if (name === 'uid') {
+				$state.go('app.profile', {
+					uid: value
+				});
+				return;
+			}
+
 			filters.setFilter(name, value);
 			updateResults();
 		});
@@ -376,12 +385,12 @@ $module.controller('People/SearchController', ['$scope', '$state', '$stateParams
 
 		function updateResults() {
 			var params = getParams();
-			$state.go($state.current.name, params, {
-				inherit: false
-			});
 
 			UserService.findAll(filters).then(function(results) {
 				$scope.results = results;
+				$state.transitionTo($state.current.name, params, {
+					inherit: false
+				});
 			}, function(results) {
 				console.log(results);
 			});
@@ -390,9 +399,17 @@ $module.controller('People/SearchController', ['$scope', '$state', '$stateParams
 		updateResults();
 	}
 ]);
-$module.controller('People/TrendingController', function() {
+$module.controller('People/TrendingController', ['$scope', 'UserService', 'SearchFilter',
+	function($scope, UserService, SearchFilter) {
+		var filter = new SearchFilter();
 
-});
+		filter.setSorting('views', SearchFilter.DESC);
+
+		UserService.findAll(filter).then(function(list) {
+			$scope.results = list;
+		});
+	}
+]);
 $module.directive('searchTags', ['genderFilter',
 	function(genderFilter) {
 		return {
@@ -466,6 +483,8 @@ $module.factory('SearchFilter', function() {
 
 	SearchFilter.prototype = {
 		constructor: SearchFilter,
+		ASC: 'asc',
+		DESC: 'desc',
 
 		clearFilters: function() {
 			this.$filter = {};
@@ -491,7 +510,7 @@ $module.factory('SearchFilter', function() {
 		setSorting: function(rule, direction) {
 			this.$sort = {
 				name: rule,
-				direction: direction || 'asc'
+				direction: direction || this.ASC
 			};
 		},
 
@@ -527,6 +546,10 @@ $module.factory('UserService', ['$http', 'assert', 'is', 'SearchFilter', 'reject
 				return profile !== null;
 			},
 
+			getActiveProfile: function() {
+				return profile;
+			},
+
 			/**
 			 * @param {Number} uid
 			 */
@@ -535,7 +558,9 @@ $module.factory('UserService', ['$http', 'assert', 'is', 'SearchFilter', 'reject
 					return rejected(new Error('Identificação de usuário inválida'));
 				}
 
-				return $http.get('/user/' + uid);
+				return $http.get('/user/' + uid).then(function(response) {
+					return response.data;
+				});
 			},
 
 			/**
@@ -589,7 +614,19 @@ $module.filter('gender', ['UserService',
 		};
 	}
 ]);
-
+$module.controller('User/ProfileController', ['$scope', '$state', '$stateParams', 'UserService',
+	function($scope, $state, $stateParams, UserService) {
+		if ($state.current.name === 'app.my-profile') {
+			$scope.profile = UserService.getActiveProfile();
+		} else {
+			UserService.findOne($stateParams.uid).then(function(profile) {
+				$scope.profile = profile;
+			}, function(reason) {
+				console.log(reason);
+			});
+		}
+	}
+]);
 $module.controller('User/SignupController', ['$scope', '$state', 'UserService',
 	function($scope, $state, UserService) {
 		$scope.user = {};
@@ -598,9 +635,9 @@ $module.controller('User/SignupController', ['$scope', '$state', 'UserService',
 			if ($form && $form.$invalid) return;
 
 			UserService.create($scope.user).then(function() {
-				$state.go('app.user.profile', {
-					id: $scope.user.uid
-				});
+				$state.go('app.my-profile');
+			}, function(reason) {
+				console.log(reason);
 			});
 		};
 	}

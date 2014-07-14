@@ -10,6 +10,8 @@ $module.factory('SearchFilter', function() {
 
 	SearchFilter.prototype = {
 		constructor: SearchFilter,
+		ASC: 'asc',
+		DESC: 'desc',
 
 		clearFilters: function() {
 			this.$filter = {};
@@ -35,7 +37,7 @@ $module.factory('SearchFilter', function() {
 		setSorting: function(rule, direction) {
 			this.$sort = {
 				name: rule,
-				direction: direction || 'asc'
+				direction: direction || this.ASC
 			};
 		},
 
