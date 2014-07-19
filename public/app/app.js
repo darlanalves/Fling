@@ -67,27 +67,6 @@ $module.config(['$stateProvider',
 		});
 	}
 ]);
-$module.controller('HeaderController', ['$scope', '$state', 'SEARCH',
-	function($scope, $state, SEARCH) {
-		$scope.searchByName = function(name) {
-			if (!name) return;
-
-			$state.go('app.search', {
-				name: name,
-				tab: SEARCH
-			}, {
-				reload: true
-			});
-		};
-	}
-]);
-$module.controller('MenuController', ['$scope', 'UserService',
-	function($scope, UserService) {
-		$scope.hasProfileActive = function() {
-			return UserService.hasProfileActive();
-		};
-	}
-]);
 $module.directive('controlGroup', function() {
 	return {
 		restrict: 'C',
@@ -343,6 +322,27 @@ $module.directive('tagBar', function() {
 		}
 	}
 });
+$module.controller('HeaderController', ['$scope', '$state', 'SEARCH',
+	function($scope, $state, SEARCH) {
+		$scope.searchByName = function(name) {
+			if (!name) return;
+
+			$state.go('app.search', {
+				name: name,
+				tab: SEARCH
+			}, {
+				reload: true
+			});
+		};
+	}
+]);
+$module.controller('MenuController', ['$scope', 'UserService',
+	function($scope, UserService) {
+		$scope.hasProfileActive = function() {
+			return UserService.hasProfileActive();
+		};
+	}
+]);
 $module.controller('People/SearchController', ['$scope', '$state', '$stateParams', 'UserService', 'SearchFilter',
 	function($scope, $state, $stateParams, UserService, SearchFilter) {
 		var filters = $scope.filters = new SearchFilter();

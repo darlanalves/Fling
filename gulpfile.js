@@ -15,17 +15,19 @@ var gulp = require('gulp'),
 	// NOTE: don't join the template strings, it will break Slush!
 	wrapper = '(function(undefined){\n\n<' + '%= contents %>\n}());';
 
+var PUBLIC = 'public/app';
+
 gulp.task('min', function() {
 	var pipe = pipeline(
 		gulp.src(['src/app/module.js', 'src/app/**/*.js']),
 		concat('app.js'),
 		wrap(wrapper),
-		gulp.dest('public'),
+		gulp.dest(PUBLIC),
 		uglify(),
 		rename({
 			suffix: '.min'
 		}),
-		gulp.dest('public')
+		gulp.dest(PUBLIC)
 	);
 
 	pipe.on('error', createLogger('min'));
@@ -36,12 +38,12 @@ gulp.task('min-libs', function() {
 	var pipe = pipeline(
 		gulp.src(['src/lib/angular.js', 'src/lib/angular-ui-router.js', 'src/lib/*.js']),
 		concat('angular.js'),
-		gulp.dest('public'),
+		gulp.dest(PUBLIC),
 		uglify(),
 		rename({
 			suffix: '.min'
 		}),
-		gulp.dest('public')
+		gulp.dest(PUBLIC)
 	);
 
 	pipe.on('error', createLogger('min-libs'));
@@ -56,7 +58,7 @@ gulp.task('sass', function() {
 			errLogToConsole: true
 		}),
 		concat('app.css'),
-		gulp.dest('public')
+		gulp.dest(PUBLIC)
 	);
 
 	pipe.on('error', createLogger('sass'));
@@ -68,7 +70,7 @@ gulp.task('mocks', function() {
 		gulp.src(['mocks/module.js', 'mocks/**/*.js']),
 		concat('mocks.js'),
 		wrap(wrapper),
-		gulp.dest('public')
+		gulp.dest(PUBLIC)
 	);
 
 	pipe.on('error', createLogger('mocks'));
@@ -88,7 +90,7 @@ gulp.task('views', function() {
 				collapseWhitespace: true
 			}
 		}),
-		gulp.dest('public')
+		gulp.dest(PUBLIC)
 	);
 
 	pipe.on('error', createLogger('views'));
@@ -132,7 +134,7 @@ gulp.task('watch', function() {
 
 gulp.task('build', ['min', 'sass', 'mocks', 'views'])
 
-gulp.task('default', ['min', 'sass', 'mocks', 'views', 'watch']);
+gulp.task('default', ['build', 'watch']);
 
 function createLogger(name) {
 	return function() {

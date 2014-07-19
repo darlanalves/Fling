@@ -2,8 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index
+# Index
+GET		/ 						controllers.Application.index
+
+# Person entity
+GET		/person					controllers.PersonController.get
+#POST	/person					controllers.Person.save
+#DELETE	/person 				controllers.Person.delete
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET		/app/*file				controllers.Assets.at(path="/public/app", file)
