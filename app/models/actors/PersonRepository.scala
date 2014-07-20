@@ -110,7 +110,7 @@ class PersonRepository extends Actor {
         }
       }
 
-      sender ! foundList
+      sender ! FoundAll(foundList)
     }
 
     case List => sender ! FoundAll(inMemoryPeople.values)
