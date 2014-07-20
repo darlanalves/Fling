@@ -3,9 +3,13 @@ package models.actors
 import scala.annotation.migration
 
 import akka.actor._
-// import configuracao.ParametrosDeExecucao
+import config.Definitions
 import models.Person
 import play.libs.Akka
+
+import utils.CPFChecker
+import utils.Pagination
+import utils.QueryFilters
 
 object PersonRepository {
 
@@ -14,82 +18,103 @@ object PersonRepository {
   trait Result
 
   case class Save(person: Person)
-  case class Get(cpf: Long)
-  case class GetMany(cpfs: Iterable[Long])
-
-  // case object PessoaCadastrada extends RespostaRepositorio
-  // case object MaximoPessoasAtingido extends RespostaRepositorio
-  // case class AlturaForaDosLimites(minima: Int, maxima: Int) extends RespostaRepositorio
-  // case class PessoaJaCadastrada(pessoa: Pessoa) extends RespostaRepositorio
-  // case class PessoaComMesmoNomeDesenvolvedor(nomeDesenvolvedor: String) extends RespostaRepositorio
-  
-  case class Found(person: Person) extends Result
-  case class NotFound(cpf: Long) extends Result
-  case class FoundPeople(person: Iterable[Person]) extends Result
-  case class PeopleCount(quantity: Int)
-  
-  case class Success() extends Result
-
+  case class FindOne(cpf: String)
+  case class FindAll(filters: QueryFilters, pagination: Pagination)
   case object Clear
-  case object List
   case object Count
-  // case class PessoasRemovidas(qtd: Int) extends Result
-  //PessoasLidas(pessoa: Iterable[Pessoa])
 
+  case object Success extends Result
+  case object LimitReached extends Result
+  case class HeightOutOfBounds(min: Int, max: Int) extends Result
+  case class AlreadyExists(person: Person) extends Result
+  case class InvalidPerson(developerName: String) extends Result
+
+  case class FoundOne(person: Person) extends Result
+  case object FoundMany extends Result
+  case class FoundAll(person: Iterable[Person]) extends Result
+  case class PersonNotFound(cpf: String) extends Result
+
+  case class PeopleCount(quantity: Int) extends Result
+  case class RemovedCount(count: Int) extends Result
+  case class ReadCount(person: Iterable[Person]) extends Result
 }
 
 
 class PersonRepository extends Actor {
-
-  //Import tudo de PersonRepository
   import models.actors.PersonRepository._
-  
-  var people = Map[Long, Person]()
+
+  var inMemoryPeople = Map[String, Person]()
+
+  val heightOutOfBounds = HeightOutOfBounds(Definitions.minHeight, Definitions.maxHeight)
+  val invalidPerson = InvalidPerson(Definitions.developerName)
 
   def receive = {
-    case Clear => {
-      sender ! Success
-    }
-  }
+    case Save(person) => {
+      if (inMemoryPeople.size == Definitions.peopleLimit) {
+        sender ! LimitReached
+      }
 
-  /*
-  def receive = {
-    case Save(pessoa) => {
-      if (pessoas.size == qtdMaximaPessoas){
-        sender ! MaximoPessoasAtingido
-      } else if (pessoa.altura > ParametrosDeExecucao.alturaMaxima || pessoa.altura < ParametrosDeExecucao.alturaMinima) {
-        sender ! AlturaForaDosLimites(ParametrosDeExecucao.alturaMinima, ParametrosDeExecucao.alturaMaxima)
-      } else if (pessoa.nome == ParametrosDeExecucao.nomeDesenvolvedor) {
-        sender ! PessoaComMesmoNomeDesenvolvedor(ParametrosDeExecucao.nomeDesenvolvedor)
-      } else if (pessoas.contains(pessoa.cpf)){
-        sender ! PessoaJaCadastrada(pessoas(pessoa.cpf))
-      }else{
-        pessoas += (pessoa.cpf -> pessoa)
-        sender ! PessoaCadastrada
+      else if (person.height > Definitions.maxHeight || person.height < Definitions.minHeight) {
+        sender ! heightOutOfBounds
+      } 
+
+      else if (person.name == Definitions.developerName) {
+        sender ! invalidPerson
+      } 
+
+      else if (inMemoryPeople.contains(person.cpf)){
+        sender ! AlreadyExists(inMemoryPeople(person.cpf))
+      }
+
+      else{
+        inMemoryPeople += (person.cpf -> person)
+        sender ! Success
       }
     }
-    
+
     case Clear => {
-      val numeroPessoas = pessoas.size
-      //Sobreescreve o mapeamento de pessoas com um Map vazio
-      pessoas = Map()
-      //Envia ("!" é um método) um objeto PessoasRemovidas com o número de pessoas removidas para quem chamou
-      sender ! PessoasRemovidas(numeroPessoas)
+      val mapSize = inMemoryPeople.size
+      inMemoryPeople = Map()
+      sender ! RemovedCount(mapSize)
     }
 
-    case Get(cpf) => {
-      if (pessoas.contains(cpf))
-        sender ! PessoaLida(pessoas(cpf))
+    case FindOne(cpf) => {
+      if (inMemoryPeople.contains(cpf))
+        sender ! FoundOne(inMemoryPeople(cpf))
       else
-        sender ! PessoaNaoCadastrada(cpf)
-    }
-    
-    case GetMany(cpfs) => {
-      val pessoasCadastradas = for(cpf <- cpfs) yield pessoas(cpf)
-      sender ! PessoasLidas(pessoasCadastradas)
+        sender ! PersonNotFound(cpf)
     }
 
-    case List => sender ! PessoasLidas(pessoas.values)
-    case Count => sender ! QuantidadePessoas(pessoas.size)
-  } */
+    case FindAll(filters, pagination) => {
+      var foundList = Map[String, Person]()
+
+      if (filters.cpf.trim != "") {
+        if (inMemoryPeople.contains(filters.cpf)) {
+          var person = inMemoryPeople(filters.cpf)
+          foundList += (person.cpf -> person)
+        }
+      }
+
+      else {
+        // for(cpf <- cpfs) yield 
+        if (filters.name.trim != "") {
+          // TODO find all by name
+        }
+
+        if (filters.minHeight > 0) {
+          // TODO filter the search results by minHeight
+        }
+
+        if (filters.gender.trim != "") {
+          // TODO filter out those that are not in the given gender
+        }
+      }
+
+      sender ! foundList
+    }
+
+    case List => sender ! FoundAll(inMemoryPeople.values)
+
+    case Count => sender ! PeopleCount(inMemoryPeople.size)
+  }
 }

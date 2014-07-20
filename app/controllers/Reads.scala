@@ -10,7 +10,7 @@ import models._
  */
 object Reads {
  implicit val personReads: Reads[Person] = (
-      (__ \ "cpf").read[Long] and
+      (__ \ "cpf").read[String] and
       (__ \ "name").read[String](minLength[String](1)) and
       (__ \ "gender").read[String] and
       (__ \ "height").read[Int]

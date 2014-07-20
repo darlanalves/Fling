@@ -1,8 +1,5 @@
 package utils
 
-import play.api.mvc.Request
-import play.api.mvc.AnyContent
-
 case class Pagination(val queryString: Map[String, Seq[String]]) {
 	val defaultLimit: Int = 10
 

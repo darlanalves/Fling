@@ -11,4 +11,4 @@ GET		/person					controllers.PersonController.get
 #DELETE	/person 				controllers.Person.delete
 
 # Map static resources from the /public folder to the /assets URL path
-GET		/app/*file				controllers.Assets.at(path="/public/app", file)
+GET		/-/*file				controllers.Assets.at(path="/public/app", file)

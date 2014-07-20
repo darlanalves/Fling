@@ -1,3 +1,3 @@
 package models
 
-case class Person(cpf: Long, name: String, gender: String, height: Int)
+case class Person(cpf: String, name: String, gender: String, height: Int)

@@ -4,12 +4,9 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import models._
 
-/**
- * Objeto com os escritores de json necessários para a aplicação
- */
 object Writes {
  implicit val personWrites: Writes[Person] = (
-      (__ \ "cpf").write[Long] and
+      (__ \ "cpf").write[String] and
       (__ \ "name").write[String] and
       (__ \ "gender").write[String] and
       (__ \ "height").write[Int]

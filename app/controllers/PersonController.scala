@@ -10,12 +10,15 @@ import akka.util.Timeout
 
 import models.Person
 import models.actors.PersonRepository
+
 import utils.Pagination
+import utils.QueryFilters
+import utils.CPFChecker
 
 import play.api._
 import play.api.mvc._
 import play.libs.Akka
-import utils.CpfUtils
+import utils._
 import controllers.Reads._
 import controllers.Writes._
 import play.api.libs.json.JsError
@@ -27,7 +30,8 @@ object PersonController extends Controller {
   implicit val context = scala.concurrent.ExecutionContext.Implicits.global
   import play.api.Play.current
 
-  val personRepository = Akka.system.actorOf(PersonRepository.props)
+  val people = Akka.system.actorOf(PersonRepository.props)
+
   // val registroDesejos = Akka.system.actorOf(RegistroDesejos.props(repositorio))
 
   // def index = Action.async { implicit request =>
@@ -36,19 +40,34 @@ object PersonController extends Controller {
     // para requisições POST o AngularJS envia os dados no formato JSON
     // val form = request.body.asJson.get
   // }
+  // 
+  
+  def index = Action.async { implicit request =>
+    implicit val timeout = Timeout(10 second)
+
+    val pagination = new Pagination(request.queryString)
+    val filters = new QueryFilters(request.queryString)
+
+    val response = (people.FindAll(filters, pagination)).mapTo[PersonRepository.FoundAll]
+    
+    val deferred = response.map(resp => resp match {
+      case PersonRepository.FoundMany=>Ok(Json.obj("foo" -> "bar"))
+      case PersonRepository.Success => Ok()
+    }) recover {
+      case _ => InternalServerError
+    }
+
+    deferred
+  }
     
   def get = Action.async { implicit request =>
     implicit val timeout = Timeout(10 second)
-    val pagination = Pagination(request.queryString)
 
-
-    // val filters = Filters(request)
-
-    /*CpfUtils.validateCPF(request.getQueryString("cpf")) match {
+    CPFChecker.validateCPF(Option(request.queryString("cpf").toString)) match {
       case Left(error) => Future.successful(Status(400)(error))
 
       case Right(cpf) => {
-        val response = (personRepository.find(filters, pagination)).mapTo[PersonRepository.People]
+        val response = (people.FindOne(filters.cpf)).mapTo[PersonRepository.FoundOne]
 
         val deferred = response.map(resp => resp match {
           case PersonRepository.NotFound(cpf) => NotFound
@@ -60,7 +79,8 @@ object PersonController extends Controller {
 
         deferred
       }
-    }*/
+    }
+
     Future.successful(Status(200)(pagination.toString()))
   }
   
